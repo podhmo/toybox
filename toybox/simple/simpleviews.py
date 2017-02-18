@@ -1,6 +1,7 @@
 import venusian
 from pyramid.config import PHASE1_CONFIG, PHASE0_CONFIG
 from pyramid.interfaces import IDict
+from ..langhelpers import normalize
 
 
 class ISimpleViewOptionsDefault(IDict):
@@ -8,10 +9,13 @@ class ISimpleViewOptionsDefault(IDict):
 
 
 # from: http://madjar.github.io/europython2013/#/step-1
-def add_simple_view(config, view, path, *args, **kwargs):
+def add_simple_view(config, view, path, registered=set(), *args, **kwargs):
     def callback():
-        route_name = view.__qualname__
-        config.add_route(route_name, path)
+        route_name = normalize(path)
+        if route_name not in registered:
+            config.add_route(route_name, path)
+            registered.add(route_name)
+
         default_kwargs = config.registry.queryUtility(ISimpleViewOptionsDefault)
         if default_kwargs is None:
             new_kwargs = kwargs
@@ -20,7 +24,7 @@ def add_simple_view(config, view, path, *args, **kwargs):
             new_kwargs.update(kwargs)
         config.add_view(view, route_name=route_name, *args, **new_kwargs)
 
-    discriminator = ('add_simple_view', path)
+    discriminator = ('add_simple_view', path, kwargs.get("request_method"), kwargs.get("context"))
     config.action(discriminator, callback, order=PHASE1_CONFIG)
 
 
