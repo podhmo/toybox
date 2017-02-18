@@ -52,4 +52,3 @@ class simple_view(object):
 def includeme(config):
     config.add_directive("add_simple_view", add_simple_view)
     config.add_directive("add_simple_view_default_options", add_simple_view_default_options)
-    config.add_simple_view_default_options({"renderer": "json"})
