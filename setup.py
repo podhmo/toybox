@@ -16,7 +16,7 @@ except IOError:
 
 
 install_requires = [
-    'setuptools',
+    'pyramid',
 ]
 
 
@@ -30,17 +30,17 @@ testing_extras = tests_require + [
 ]
 
 setup(name='toybox',
-      version='0.0',
-      description='tiny api framework',
+      version='0.0.0',
+      description='tiny api framework. don\'t use this in production.',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
           "Programming Language :: Python",
           "Programming Language :: Python :: Implementation :: CPython",
       ],
-      keywords='',
-      author="",
-      author_email="",
-      url="",
+      keywords='web, onefile, pyramid',
+      author="podhmo",
+      author_email="ababjam61@gmail.com",
+      url="https://github.com/podhmo/toybox",
       packages=find_packages(exclude=["toybox.tests"]),
       include_package_data=True,
       zip_safe=False,
@@ -53,4 +53,3 @@ setup(name='toybox',
       test_suite="toybox.tests",
       entry_points="""
 """)
-
