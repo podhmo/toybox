@@ -8,4 +8,4 @@ def includeme(config):
     config.add_simple_view_default_options({"renderer": "json"})
 
 
-run = _RunnerForOnefile([lambda c: c.include(includeme)])
+run = _RunnerForOnefile([includeme])

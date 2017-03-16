@@ -63,7 +63,7 @@ class _RunnerForOnefile(object):
     def __init__(self, modifiers=None):
         self.modifiers = modifiers or []
 
-    def add_modify(self, modify):
+    def include(self, modify):
         self.modifiers.append(modify)
 
     @property
@@ -86,14 +86,12 @@ class _RunnerForOnefile(object):
     def ptweens(self):
         return partial(self.__call__, cont=cont_ptweens)
 
-    def __call__(self, settings=None, debug=True, cont=cont_wsgi, modifiers=None, scan=True, package=None, level=2, *args, **kwargs):
+    def __call__(self, settings=None, debug=True, cont=cont_wsgi, scan=True, package=None, level=2, *args, **kwargs):
         package = package or caller_package(level=level)
         config = Configurator(package=package, settings={"debug_all": debug})
 
-        for modify in self.modifiers:
-            modify(config)
-        for modify in modifiers or []:
-            modify(config)
+        for callable in self.modifiers:
+            config.include(callable)
 
         if scan:
             scan_point = package.__name__

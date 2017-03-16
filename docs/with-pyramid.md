@@ -16,6 +16,6 @@ def support_datetime_response(config):
 
 
 if __name__ == "__main__":
-    run.add_modify(support_datetime_response)
+    run.include(support_datetime_response)
     run(port=8080)
 ```
