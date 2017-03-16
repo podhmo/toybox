@@ -65,6 +65,7 @@ class _RunnerForOnefile(object):
 
     def include(self, modify):
         self.modifiers.append(modify)
+        return self
 
     @property
     def wsgi(self):
