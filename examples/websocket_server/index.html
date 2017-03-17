@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<!-- code modified from https://www.websocket.org/echo.html -->
+<meta charset="utf-8" />
+<title>websocket example</title>
+<script src="${request.static_url('websocket_server:static/app.js')}"></script>
+<script>
+  run("${handler.uri}");
+</script>
+
+<h2>websocket example</h2>
+<div id="output"></div>
