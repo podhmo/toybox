@@ -62,6 +62,8 @@ class ValidatedViewDecorator(object):
                 wr.set_wrapped(req_attr, deserialized)
             except marshmallow.ValidationError as e:
                 self.on_input_error(wr, e)
+            except Exception as e:
+                raise httpexceptions.HTTPBadRequest(e)
         return wr
 
     def make_serialize(self, request, method_name):
@@ -80,6 +82,8 @@ class ValidatedViewDecorator(object):
                 return serialized
             except marshmallow.ValidationError as e:
                 return self.on_output_error(response, value, e)
+            except Exception as e:
+                raise httpexceptions.HTTPInternalServerError(e)
         return serialize
 
     def on_input_error(self, wrequest, e):
