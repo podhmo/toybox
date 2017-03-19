@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from pyramid.view import (
     view_config
 )
@@ -17,7 +18,7 @@ def hello(context, request):
 
         * 'name'  -  `{"type": "string", "example": "Ada", "default": "Friend"}`
     """
-    return {}
+    return {'message': 'Welcome, {}!'.format(request.GET["name"])}
 
 
 @view_config(decorator=withswagger(schema.AddInput, schema.AddOutput), renderer='vjson', request_method='POST', route_name='views1')
@@ -45,7 +46,9 @@ def add(context, request):
         }
     ```
     """
-    return {}
+    x = request.json["x"]
+    y = request.json["y"]
+    return {"result": x + y}
 
 
 @view_config(decorator=withswagger(schema.DateaddInput, schema.DateaddOutput), renderer='vjson', request_method='POST', route_name='views2')
@@ -82,4 +85,13 @@ def dateadd(context, request):
         }
     ```
     """
-    return {}
+    value = request.json["value"]
+    addend = request.json["addend"]
+    unit = request.json["unit"]
+    value = value or datetime.utcnow()
+    if unit == 'minutes':
+        delta = timedelta(minutes=addend)
+    else:
+        delta = timedelta(days=addend)
+    result = value + delta
+    return {'result': result}
