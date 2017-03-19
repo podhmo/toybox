@@ -48,6 +48,10 @@ setup(name='toybox',
       extras_require={
           'testing': testing_extras,
           'docs': docs_extras,
+          'swagger': [
+              "swagger-marshmallow-codegen",
+              "pyramid-swagger-router"
+          ]
       },
       tests_require=tests_require,
       test_suite="toybox.tests",

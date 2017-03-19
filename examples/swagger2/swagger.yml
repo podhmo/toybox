@@ -1,0 +1,95 @@
+consumes:
+- application/json
+
+info:
+  title: Swagger
+  version: 0.1.0
+
+paths:
+  /:
+    parameters:
+      - name: name
+        in: query
+        type: string
+        example: Ada
+        default: Friend
+    get:
+      description: A welcome page.
+      operationId: views.hello
+      responses:
+        200:
+          description: ok
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+              - message
+  /add:
+    post:
+      description: An addition endpoint
+      operationId: views.add
+      parameters:
+        - name: body
+          in: body
+          schema:
+            type: object
+            properties:
+              x:
+                type: integer
+              y:
+                type: integer
+            required:
+              - x
+              - y
+      responses:
+        200:
+          description: ok
+          schema:
+            type: object
+            properties:
+              result:
+                type: integer
+            required:
+              - result
+  /dateadd:
+    post:
+      operationId: views.dateadd
+      parameters:
+        - name: body
+          in: body
+          schema:
+            type: object
+            properties:
+              value:
+                type: string
+                format: date
+              addend:
+                minimum: 1
+                type: integer
+              unit:
+                type: string
+                default: days
+                enum:
+                  - days
+                  - minutes
+            required:
+              - addend
+      responses:
+        200:
+          schema:
+            type: object
+            properties:
+              result:
+                type: string
+                format: date
+            required:
+              - result
+          description: ok
+
+produces:
+- application/json
+schemes:
+- http
+swagger: "2.0"
