@@ -1,4 +1,3 @@
-import json
 import marshmallow
 import logging
 from functools import partial
@@ -58,12 +57,13 @@ class ValidatedViewDecorator(object):
             if schema_cls is None:
                 continue
             try:
-                deserialized, _ = schema_cls(strict=True).load(getattr(request, req_attr))
+                schema = schema_cls(strict=True)
+                deserialized, _ = schema.load(getattr(request, req_attr))
                 wr.set_wrapped(req_attr, deserialized)
             except marshmallow.ValidationError as e:
-                self.on_input_error(wr, e)
+                return self.on_input_error(wr, e, as_json=True)
             except Exception as e:
-                raise httpexceptions.HTTPBadRequest(e)
+                return self.on_input_error(wr, e)
         return wr
 
     def make_serialize(self, request, method_name):
@@ -81,23 +81,25 @@ class ValidatedViewDecorator(object):
                 schema.load(value)
                 return serialized
             except marshmallow.ValidationError as e:
-                return self.on_output_error(response, value, e)
+                return self.on_output_error(response, value, e, as_json=True)
             except Exception as e:
-                raise httpexceptions.HTTPInternalServerError(e)
+                return self.on_output_error(response, value, e)
         return serialize
 
-    def on_input_error(self, wrequest, e):
+    def on_input_error(self, wrequest, e, as_json=False):
         exc = httpexceptions.HTTPBadRequest()
-        exc.body_template_obj = ThroughBodyTemplate(e.messages)
+        if as_json:
+            exc.body_template_obj = _ThroughBodyTemplate(e.messages)
         raise exc
 
-    def on_output_error(self, response, value, e):
+    def on_output_error(self, response, value, e, as_json=False):
         exc = httpexceptions.HTTPInternalServerError()
-        exc.body_template_obj = ThroughBodyTemplate(e.messages)  # with e.data?
+        if as_json:
+            exc.body_template_obj = _ThroughBodyTemplate(e.messages)  # with e.data?
         raise exc
 
 
-class ThroughBodyTemplate:  # hack: for json respont
+class _ThroughBodyTemplate:  # hack: for json respont
     def __init__(self, value):
         self.value = value
 
