@@ -33,5 +33,5 @@ def dateadd(request):
 if __name__ == "__main__":
     import logging
     logging.basicConfig(level=logging.DEBUG)
-    run.include("toybox.swagger")
+    run.include("toybox.swagger.simpleapi")
     run(port=5001)
