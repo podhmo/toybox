@@ -13,9 +13,18 @@ class ISimpleViewOptionsDefault(IDict):
     pass
 
 
+def _get_registered_routes(config, k="toybox.simpleapi.registered"):
+    if k not in config.registry.settings:
+        config.registry.settings[k] = set()
+    return config.registry.settings[k]
+
+
 # from: http://madjar.github.io/europython2013/#/step-1
-def add_simple_view(config, view, path, registered=set(), *args, **kwargs):
+def add_simple_view(config, view, path, *args, **kwargs):
     def callback():
+        # xxx:
+        registered = _get_registered_routes(config)
+
         route_name = kwargs.pop("route_name", None) or normalize(path)
         if route_name not in registered:
             config.add_route(route_name, path)
