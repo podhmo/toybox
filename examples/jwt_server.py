@@ -7,7 +7,7 @@ from pyramid.security import Allow
 
 # please: pip install pyramid_jwt
 """
-python ./jwt_server
+python ./jwt_server.py
 
 # 403
 $ http GET :8080/secure
