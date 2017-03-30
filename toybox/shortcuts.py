@@ -89,7 +89,7 @@ class _RunnerForOnefile(object):
 
     def __call__(self, settings=None, debug=True, cont=cont_wsgi, scan=True, package=None, level=2, *args, **kwargs):
         package = package or caller_package(level=level)
-        config = Configurator(package=package, settings={"debug_all": debug})
+        config = Configurator(package=package, settings={"debug_all": debug, **settings})
 
         for callable in self.modifiers:
             config.include(callable)
