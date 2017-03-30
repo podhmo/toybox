@@ -16,7 +16,7 @@ class ISimpleViewOptionsDefault(IDict):
 # from: http://madjar.github.io/europython2013/#/step-1
 def add_simple_view(config, view, path, registered=set(), *args, **kwargs):
     def callback():
-        route_name = normalize(path)
+        route_name = kwargs.pop("route_name", None) or normalize(path)
         if route_name not in registered:
             config.add_route(route_name, path)
             registered.add(route_name)
