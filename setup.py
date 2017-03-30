@@ -30,7 +30,7 @@ testing_extras = tests_require + [
 ]
 
 setup(name='toybox',
-      version='0.0.1',
+      version='0.0.2',
       description='tiny api framework. don\'t use this in production.',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
